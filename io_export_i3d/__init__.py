@@ -27,7 +27,7 @@ import bpy
 print(__file__)
 
 bl_info = {
-    "name": "GIANTS I3D Exporter Tools",
+    "name": "GIANTS I3D Blender Tools",
     "description": "GIANTS i3D Game Engine Import-Export.",
     "author": "GIANTS Software, Jason Oppermann",
     "version": (8, 1, 1),
