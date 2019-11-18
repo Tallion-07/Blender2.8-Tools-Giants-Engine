@@ -51,38 +51,38 @@ else:
     from . import dcc
 
 import bpy
+from pyclbr import Class
 
-#-------------------------------------------------------------------------------
-#   I3D Menu Class
-#-------------------------------------------------------------------------------
-class I3D_Menu( bpy.types.Menu ):
+class I3D_Menu(bpy.types.Menu):
+    """Menu class labels."""
+    
     bl_label = "GIANTS I3D"
     bl_idname = "i3d_menu"
 
-    def draw( self, context ):
-        layout = self.layout
-        layout.label( text = "v {0}".format(bl_info["version"]) )
-        layout.operator( "i3d.menu_export" )
-        
-#-------------------------------------------------------------------------------
-#   I3D Menu Draw 
-#-------------------------------------------------------------------------------
-def draw_I3D_Menu( self, context ):
-    self.layout.menu( I3D_Menu.bl_idname )
+def draw(self, context):
+    """Menu layout."""
+    layout = self.layout
+    layout.label(text="v {0}".format(bl_info["version"]))
+    layout.operator("i3d.menu_export")
+      
+def draw_I3D_Menu(self, context):
+    """Field filling of menu label."""
+    self.layout.menu(I3D_Menu.bl_idname)
 
-#-------------------------------------------------------------------------------
-#   Register
-#-------------------------------------------------------------------------------
 def register():
+    """Registration of plug-in."""
     i3d_ui.register()
-    bpy.utils.register_class( I3D_Menu )
-    bpy.types.INFO_HT_header.append( draw_I3D_Menu )
+    bpy.utils.register_class(I3D_Menu)
+    bpy.types.INFO_HT_header.append(draw_I3D_Menu)
 
 def unregister():
+    """Deregistration of plug-in."""
     i3d_ui.unregister()
-    bpy.utils.unregister_class( I3D_Menu )
-    bpy.types.INFO_HT_header.remove( draw_I3D_Menu )
+    bpy.utils.unregister_class(I3D_Menu)
+    bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
 
 if __name__ == "__main__":
     register()
-#-------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+
