@@ -37,31 +37,15 @@ bl_info = {
     "category": "Import-Export"
 }
 
-if "bpy" in locals():
-    import importlib
-    if "import_i3d" in locals():
-        importlib.reload(import_i3d)
-    if "export_i3d_bin" in locals():
-        importlib.reload(export_i3d_bin)
-#    if "i3d_ui" in locals():
-#        importlib.reload(i3d_ui)
-#    if "i3d_lib" in locals():
-#        importlib.reload(lib_i3d)
-#    if "dccBlender" in locals():
-#        importlib.reload(dccBlender)
-    if "export_i3d" in locals():
-        importlib.reload(export_i3d)
-#    if "i3d_IOexport" in locals():
-#        importlib.reload(i3d_IOexport)
-#    if "i3d_UIexport" in locals():
-#        importlib.reload(i3d_UIexport)
 global DCC_PLATFORM
 DCC_PLATFORM = "blender"
 
 if "bpy" in locals():
     import importlib
-    importlib.reload(i3d_ui)
-    importlib.reload(dcc)
+    if "i3d_ui" in locals():
+        importlib.reload(i3d_ui)
+        importlib.reload(dcc)
+
 else:
     from . import i3d_ui
     from . import dcc
