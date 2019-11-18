@@ -21,7 +21,7 @@
 
 TODO: check current programming
 """
-# <pep8-80 compliant>
+# <pep8-120 compliant>
 
 
 bl_info = {
