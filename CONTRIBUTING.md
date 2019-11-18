@@ -1,5 +1,6 @@
-## How to Contribute
-### Did you find a bug?
+# How to Contribute
+
+## Did you find a bug
 
 Ensure the bug was not already reported by searching on [Issues](https://github.com/Tallion-07/Blender-2.8-Plug-in-Giants-Engine/issues?q=is%3Aopen+is%3Aissue+label%3A%22bug+reported%22).
 
@@ -11,6 +12,7 @@ Simply copy the content of the appropriate template into a .rb file, make the ne
 For more detailed information on submitting a bug report and creating an issue, visit our Wiki guidelines.
 
 ### Did you write a patch that fixes a bug?
+
 Open a new GitHub pull request with the patch.
 
 Ensure the PR description clearly describes the problem and solution. Include the relevant issue number by including a issue hash tag if applicable.
@@ -29,6 +31,7 @@ Do you have questions about the source code?
 Ask any question about how to use, check the [forum](https://discord.gg/apnvtRw).
 
 ### Are you good at writing?
+
 Do you want to contribute to the documentation, apply here using a wiki [request](https://github.com/Tallion-07/Blender-2.8-Plug-in-Giants-Engine/issues/new/choose)?
 
 This Plugin is a volunteer effort. We encourage you to pitch in and join the team!

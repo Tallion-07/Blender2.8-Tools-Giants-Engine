@@ -1,6 +1,6 @@
-## Keep this file as major template to be included in each release as a *.txt file.
+# Keep this file as major template to be included in each release as a *.txt file.
 
-### Template beginning
+## Template beginning
 
 * Version 0.0.0
 
@@ -8,10 +8,9 @@
 
 * Bugs fixed
 
-### Template end
+## Template end
 
-### Additional information to be added for each version to be added below
-
+## Additional information to be added for each version to be added below
 
 Version 0.0.0
 
