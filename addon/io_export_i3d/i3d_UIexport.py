@@ -128,10 +128,10 @@ def draw(self, context):
                  emboss=False)
         if context.scene.I3D_UIexportSettings.UI_miscellaneous:
             row = box.row()
-            row.prop(context.scene.I3D_export, "I3D_exportVerbose")
-            row.prop(context.scene.I3D_export, "I3D_exportRelativePaths")
+        #    row.prop(context.scene.I3D_export, "I3D_exportVerbose")
+        #    row.prop(context.scene.I3D_export, "I3D_exportRelativePaths")
             row = box.row()
-            row.prop(context.scene.I3D_export, "I3D_exportApplyModifiers")
+        #    row.prop(context.scene.I3D_export, "I3D_exportApplyModifiers")
             row = box.row()
             row.prop(context.scene.I3D_export, "I3D_exportAxisOrientations")
         # -----------------------------------------
