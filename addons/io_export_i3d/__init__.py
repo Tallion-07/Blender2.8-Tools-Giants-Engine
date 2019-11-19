@@ -23,6 +23,10 @@ TODO: check current programming
 """
 # <pep8-120 compliant>
 
+import _bpy
+
+from addons.io_export_i3d import i3d_ui
+from addons.io_export_i3d.dcc import 
 
 bl_info = {
     "name": "GIANTS I3D Blender Tools",
@@ -48,26 +52,30 @@ if "bpy" in locals():
 
 else:
     from io_export_i3d import i3d_ui
-    from . import dcc
+    
 
-import bpy
-
+# TODO moved to top - import _bpy 
+# moved to top - from addons.io_export_i3d import i3d_ui
+from . import dcc
 
 class I3D_Menu(bpy.types.Menu):
     """Menu class labels."""
-    
+
     bl_label = "GIANTS I3D"
     bl_idname = "i3d_menu"
+
 
 def draw(self, context):
     """Menu layout."""
     layout = self.layout
     layout.label(text="v {0}".format(bl_info["version"]))
     layout.operator("i3d.menu_export")
-      
+
+
 def draw_I3D_Menu(self, context):
     """Field filling of menu label."""
     self.layout.menu(I3D_Menu.bl_idname)
+
 
 """TODO
 classes = (
@@ -76,6 +84,8 @@ classes = (
 )
 """
 """Registration and reverse to be completed."""
+
+
 def register():
     """Registration of plug-in."""
     """TODO - for cls in classes:
@@ -87,6 +97,7 @@ def register():
     bpy.utils.register_class(I3D_Menu)
     bpy.types.INFO_HT_header.append(draw_I3D_Menu)
 
+
 def unregister():
     """Deregistration of plug-in."""
     """TODO - from bpy.utils import unregister_class
@@ -97,8 +108,8 @@ def unregister():
     bpy.utils.unregister_class(I3D_Menu)
     bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
 
+
 if __name__ == "__main__":
     register()
 
 # -----------------------------------------------------------------------------
-
