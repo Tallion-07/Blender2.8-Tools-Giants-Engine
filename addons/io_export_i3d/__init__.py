@@ -22,11 +22,12 @@
 TODO: check current programming
 """
 # <pep8-120 compliant>
-
+import time
 import bpy
-
 from addons.io_export_i3d import i3d_ui
 from addons.io_export_i3d.dcc import *
+
+time_start = time.time()
 
 bl_info = {
     "name": "GIANTS I3D Blender Tools",
@@ -108,6 +109,8 @@ def unregister():
         unregister_class(cls)
     bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
 
+
+print("My Script Finished: %.4f sec" % (time.time() - time_start))
 
 if __name__ == "__main__":
     register()
