@@ -80,7 +80,6 @@ def draw_I3D_Menu(self, context):
 classes = (
     I3D_Menu,
 )
-register, unregister = bpy.utils.register_classes_factory(classes)
 
 """TODO
 classes = (
@@ -88,19 +87,27 @@ classes = (
     ExportI3D,
 )
 """
-""" Old Registrations
+
+
 def register():
-    i3d_ui.register()
-    bpy.utils.register_class(I3D_Menu)
+    """Change in register function to retain bpy.types header.append."""
+    #    i3d_ui.register()
+    #    bpy.utils.register_class(I3D_Menu)
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
     bpy.types.INFO_HT_header.append(draw_I3D_Menu)
 
 
 def unregister():
-    i3d_ui.unregister()
-    bpy.utils.unregister_class(I3D_Menu)
+    """Change in Unregister function to retainbpy.types header.remove."""
+    #    i3d_ui.unregister()
+    #    bpy.utils.unregister_class(I3D_Menu)
+    from bpy.utils import unregister_class
+    for cls in reversed(classes):
+        unregister_class(cls)
     bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
 
-end """
 
 if __name__ == "__main__":
     register()
