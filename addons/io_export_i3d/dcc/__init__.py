@@ -21,14 +21,14 @@
  ##### END GPL LICENSE BLOCK #####
 """
 
-print(__file__)
+# print(__file__)
 
-from io_export_i3d import DCC_PLATFORM as DCC_PLATFORM
+from addons.i3d_IOexport import DCC_PLATFORM as DCC_PLATFORM
 
-if "houdini" == DCC_PLATFORM:
-    from . import dccHoudini as dcc
-elif "blender" == DCC_PLATFORM:
-    from . import dccBlender as dcc
+# if "houdini" == DCC_PLATFORM:
+#    from . import dccHoudini as dcc
+# elif "blender" == DCC_PLATFORM:
+from . import dccBlender as dcc
 
 # -----------------------------------------------------------------------------
 #   Globals
