@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
+
 """
- ##### BEGIN GPL LICENSE BLOCK #####
+  ##### BEGIN GPL LICENSE BLOCK #####
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -16,12 +17,14 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
- ##### END GPL LICENSE BLOCK #####
+  ##### END GPL LICENSE BLOCK #####
 
  Copyright 2004 (C) GIANTS Software GmbH, Confidential, All Rights Reserved.
+
 """
 
-import bpy, bpy_extras
+import bpy
+import bpy_extras
 import io_export_i3d.i3d_IOexport as i3d_IOexport
 
 global i3d_node
@@ -32,24 +35,35 @@ global i3d_node
 
 
 class I3D_MenuExport(bpy.types.Operator):
+        
+    """Export button labels."""
+    
     bl_label = "I3D Exporter"
     bl_idname = "i3d.menu_export"
 
-    def execute(self, context):
-        try:
-            bpy.utils.register_class(I3D_PanelExport)
-            bpy.utils.register_class(I3D_PanelExport_ButtonClose)
-            bpy.utils.register_class(I3D_PanelExport_ButtonExport)
-            bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
-        except:
-            pass
-        return {'FINISHED'}
+def execute(self, context):
+   
+    """Export button attributes."""
+    try:
+        bpy.utils.register_class(I3D_PanelExport)
+        bpy.utils.register_class(I3D_PanelExport_ButtonClose)
+        bpy.utils.register_class(I3D_PanelExport_ButtonExport)
+        bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+    except:
+        pass
+    return {'FINISHED'}
+
+
 # -------------------------------------------------------------------------------
 #   File -> Export
 # -------------------------------------------------------------------------------
 
+class I3D_FileExport(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
+    
+    
+    """Export selection labels."""
 
-class I3D_FileExport( bpy.types.Operator, bpy_extras.io_utils.ExportHelper ):
+
     bl_idname = "i3d.file_export"
     bl_label = "Export I3D"
     bl_options = {'PRESET'}
@@ -59,10 +73,16 @@ class I3D_FileExport( bpy.types.Operator, bpy_extras.io_utils.ExportHelper ):
 
 
 def __init__(self):
-        self.filepath = bpy.context.scene.I3D_export.I3D_exportFileLocation
+
+    """Export file location."""
+
+    self.filepath = bpy.context.scene.I3D_export.I3D_exportFileLocation
 
 
 def draw(self, context):
+
+    """Menu GUI outline."""
+
     layout = self.layout
     # -----------------------------------------
     # "Export Selected" box
@@ -128,16 +148,19 @@ def draw(self, context):
                  emboss=False)
         if context.scene.I3D_UIexportSettings.UI_miscellaneous:
             row = box.row()
-        #    row.prop(context.scene.I3D_export, "I3D_exportVerbose")
-        #    row.prop(context.scene.I3D_export, "I3D_exportRelativePaths")
+            row.prop(context.scene.I3D_export, "I3D_exportVerbose")
+            row.prop(context.scene.I3D_export, "I3D_exportRelativePaths")
             row = box.row()
-        #    row.prop(context.scene.I3D_export, "I3D_exportApplyModifiers")
+            row.prop(context.scene.I3D_export, "I3D_exportApplyModifiers")
             row = box.row()
             row.prop(context.scene.I3D_export, "I3D_exportAxisOrientations")
         # -----------------------------------------
 
 
 def execute(self, context):
+
+    """File name and path."""
+
     bpy.context.scene.I3D_export.I3D_exportUseBlenderFileName = False
     bpy.context.scene.I3D_export.I3D_exportFileLocation = self.filepath
     if (self.I3D_exportSelected):
@@ -148,9 +171,13 @@ def execute(self, context):
 
 
 def fileExportMenuItem(self, context):
+
+    """Addition of file name extenstion."""
+
     self.layout.operator(I3D_FileExport.bl_idname, text="GIANTS I3D (.i3d)")
+
 # -------------------------------------------------------------------------------
-#   Properties Pannel
+#   Properties Panel
 # -------------------------------------------------------------------------------
 
 

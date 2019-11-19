@@ -22,7 +22,8 @@
 
 # print(__file__)
 
-import bpy, bpy_extras
+import bpy
+import bpy_extras
 import io_export_i3d.i3d_export
 import io_export_i3d.dcc as dcc
 
@@ -260,7 +261,7 @@ def draw(self, context):
     # -----------------------------------------
     # TODO Check "Attributes tab" elif
     # "Attributes" tab
-    elif 'attr' == context.scene.I3D_UIexportSettings.UI_settingsMode:
+    if 'attr' == context.scene.I3D_UIexportSettings.UI_settingsMode:
         # -----------------------------------------
         # "Current Node" box
         box = layout.box()
