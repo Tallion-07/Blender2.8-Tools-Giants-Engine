@@ -19,7 +19,7 @@
             ##### END GPL LICENSE BLOCK #####
 """
 
-# print(__file__) # rem
+# print(__file__)
 
 import bpy
 import bmesh
