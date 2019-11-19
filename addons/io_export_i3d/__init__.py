@@ -23,10 +23,10 @@ TODO: check current programming
 """
 # <pep8-120 compliant>
 
-import _bpy
+import bpy
 
 from addons.io_export_i3d import i3d_ui
-from addons.io_export_i3d.dcc import 
+from addons.io_export_i3d.dcc import *
 
 bl_info = {
     "name": "GIANTS I3D Blender Tools",
@@ -44,19 +44,19 @@ bl_info = {
 global DCC_PLATFORM
 DCC_PLATFORM = "blender"
 
-if "bpy" in locals():
-    import importlib
-    if "i3d_ui" in locals():
-        importlib.reload(i3d_ui)
-        importlib.reload(dcc)
+# if "bpy" in locals():
+#     import importlib
+#     if "i3d_ui" in locals():
+#         importlib.reload(i3d_ui)
+#         importlib.reload(dcc)
 
-else:
-    from io_export_i3d import i3d_ui
-    
+# else:
+#     from io_export_i3d import i3d_ui
 
-# TODO moved to top - import _bpy 
+
+# TODO moved to top - import _bpy
 # moved to top - from addons.io_export_i3d import i3d_ui
-from . import dcc
+# from . import dcc
 
 class I3D_Menu(bpy.types.Menu):
     """Menu class labels."""
@@ -77,37 +77,30 @@ def draw_I3D_Menu(self, context):
     self.layout.menu(I3D_Menu.bl_idname)
 
 
+classes = (
+    I3D_Menu,
+)
+register, unregister = bpy.utils.register_classes_factory(classes)
+
 """TODO
 classes = (
     ImportI3D,
     ExportI3D,
 )
 """
-"""Registration and reverse to be completed."""
-
-
+""" Old Registrations
 def register():
-    """Registration of plug-in."""
-    """TODO - for cls in classes:
-        from bpy.utils import register_class
-        for cls in classes:
-            register_class(cls)
-    """
     i3d_ui.register()
     bpy.utils.register_class(I3D_Menu)
     bpy.types.INFO_HT_header.append(draw_I3D_Menu)
 
 
 def unregister():
-    """Deregistration of plug-in."""
-    """TODO - from bpy.utils import unregister_class
-    for cls in reversed(classes):
-        unregister_class(cls)
-    """
     i3d_ui.unregister()
     bpy.utils.unregister_class(I3D_Menu)
     bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
 
+end """
 
 if __name__ == "__main__":
     register()
