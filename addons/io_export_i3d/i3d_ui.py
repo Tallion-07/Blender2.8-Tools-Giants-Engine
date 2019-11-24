@@ -24,21 +24,13 @@
 
 import bpy
 import bpy_extras
-import io_export_i3d.i3d_export
+from bpy.props import (BoolProperty, EnumProperty, FloatProperty, IntProperty,
+                       StringProperty)
+from bpy_extras.io_utils import (ExportHelper, axis_conversion,
+                                 orientation_helper, path_reference_mode)
+
 import io_export_i3d.dcc as dcc
-from bpy.props import (
-    StringProperty,
-    BoolProperty,
-    FloatProperty,
-    IntProperty,
-    EnumProperty,
-)
-from bpy_extras.io_utils import (
-    ExportHelper,
-    orientation_helper,
-    path_reference_mode,
-    axis_conversion,
-)
+import io_export_i3d.i3d_export
 
 # ------------------------------------------------------------------------------
 #   "I3D Exporter" I3D Menu Item
@@ -532,20 +524,8 @@ class I3D_PanelExportView:
     bl_label = "GIANTS I3D Exporter"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Tool"
-
-
-@classmethod
-def poll(cls, scene):
-    """Root Panel."""
-    return (scene.object is not None)
-
-
-class PanelScene(I3D_PanelExportView, bpy.types.Panel):
-    """Scene Panel."""
-
-    bl_idname = "i3d_scene_export"
-    bl_label = "Panel One"
+    bl_idname = "i3d_panel_export"
+    bl_category = "scene"
 
 
 def draw(self, context):
@@ -871,9 +851,6 @@ class I3D_PanelExport_ButtonExport(bpy.types.Operator):
 #   Init Scene PropertyGroups
 # -----------------------------------------------------------------------------
 
-
-
-
     @classmethod
     def register(cls):
         bpy.types.Scene.I3D_UIexportSettings = bpy.props.PointerProperty(
@@ -888,9 +865,9 @@ class I3D_PanelExport_ButtonExport(bpy.types.Operator):
             del bpy.context.scene['I3D_UIexportSettings']
         try:
             del bpy.types.Scene.I3D_UIexportSettings
+
         except:
             pass
-
 # -----------------------------------------------------------------------------
 #   Register
 # -----------------------------------------------------------------------------

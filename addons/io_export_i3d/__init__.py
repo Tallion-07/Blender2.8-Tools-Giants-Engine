@@ -24,8 +24,8 @@ TODO: check current programming
 # <pep8-120 compliant>
 import time
 import bpy
-from addons.io_export_i3d import i3d_ui
-from addons.io_export_i3d.dcc import *
+from io_export_i3d import i3d_ui
+from . import dcc
 
 time_start = time.time()
 
