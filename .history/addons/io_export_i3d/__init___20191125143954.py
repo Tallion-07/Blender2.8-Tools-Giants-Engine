@@ -55,7 +55,7 @@ DCC_PLATFORM = "blender"
 #     from io_export_i3d import i3d_ui
 
 
-# moved to top - import _bpy
+# TODO moved to top - import _bpy
 # moved to top - from addons.io_export_i3d import i3d_ui
 # from . import dcc
 

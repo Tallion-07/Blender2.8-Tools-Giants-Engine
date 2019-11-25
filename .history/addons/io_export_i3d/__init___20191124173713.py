@@ -18,9 +18,9 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
                 ##### END GPL LICENSE BLOCK #####
-"""
-# TODO: check current programming
 
+TODO: check current programming
+"""
 # <pep8-120 compliant>
 import time
 import bpy
@@ -55,7 +55,7 @@ DCC_PLATFORM = "blender"
 #     from io_export_i3d import i3d_ui
 
 
-# moved to top - import _bpy
+# TODO moved to top - import _bpy
 # moved to top - from addons.io_export_i3d import i3d_ui
 # from . import dcc
 
