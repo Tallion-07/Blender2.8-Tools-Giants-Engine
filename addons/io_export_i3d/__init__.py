@@ -24,7 +24,7 @@
 # <pep8-120 compliant>
 import time
 import bpy
-from io_export_i3d import i3d_ui
+from addons import i3d_ui
 from . import dcc
 
 time_start = time.time()
@@ -91,7 +91,7 @@ classes = (
 
 
 def register():
-    """Change in register function to retain bpy.types header.append."""
+    """Change in register function but retain bpy.types header.append."""
     #    i3d_ui.register()
     #    bpy.utils.register_class(I3D_Menu)
 
@@ -101,7 +101,7 @@ def register():
 
 
 def unregister():
-    """Change in Unregister function to retainbpy.types header.remove."""
+    """Change in Unregister method but retain bpy.types.header.remover"""
     #    i3d_ui.unregister()
     #    bpy.utils.unregister_class(I3D_Menu)
     bpy.types.INFO_HT_header.remove(draw_I3D_Menu)
