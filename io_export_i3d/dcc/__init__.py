@@ -20,7 +20,7 @@
 
  ##### END GPL LICENSE BLOCK #####
 """
-
+"""
 # print(__file__)
 
 from . import DCC_PLATFORM as DCC_PLATFORM
@@ -210,9 +210,12 @@ def I3DSaveAttributeString(m_node, m_attr, m_val):
     if(not dcc.I3DAttributeExists(m_node, m_attr)):
         dcc.I3DAddAttrString(m_node, m_attr)
     dcc.I3DSetAttrString(m_node, m_attr, m_val)
-
-
-def I3DLoadObjectAttributes():
+"""
+# -------------------------------------------------
+# I3D_PanelExport_buttonAttr
+# selecting which data to export for node export
+# -------------------------------------------------
+class I3DLoadObjectAttributes():
     m_nodes = dcc.getSelectedNodes()
     if(0 != len(m_nodes)):
         m_node = m_nodes[0]
@@ -264,8 +267,8 @@ def I3DRemoveSelectedAttributes():
         I3DLoadObjectAttributes()
     else:
         dcc.UIShowWarning('Nothing selected')
-
-
+# ---------------------------------------------
+"""
 def I3DRemoveAttributes(m_node):
     for k, v in SETTINGS_ATTRIBUTES.items():
         dcc.I3DRemoveAttribute(m_node, k)
@@ -325,8 +328,10 @@ def UIGetAttrString(m_attr):
         if (m_attr in SETTINGS_UI):
             return SETTINGS_UI[m_attr]['defaultValue']
     return str("")
-
-
+"""
+# ------------------------------------------
+# Gathered Node data for exporting
+# ------------------------------------------
 def getNodeData(m_node):
     m_nodeData = {}
     m_nodeData["fullPathName"] = "ROOT"
@@ -409,3 +414,4 @@ def getCameraData(m_node):
     m_camera["nearClip"] = "0.1"
     m_camera["farClip"] = "10000"
     return dcc.getCameraData(m_node, m_camera)
+# -----------------------------------------------

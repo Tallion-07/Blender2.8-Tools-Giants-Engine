@@ -48,10 +48,11 @@ bl_info = {
 if "bpy" in locals():
     import importlib
 if "import_i3d" in locals():
-    importlib.reload(import_i3d) 
+    importlib.reload('import_i3d') 
 if "export_i3d" in locals():
-    importlib.reload(export_i3d)
+    importlib.reload('export_i3d')
 
+importlib.import_module('export_i3d', 'io_export_i3d')
 import bpy
 from bpy.props import (
     BoolProperty,
@@ -547,9 +548,9 @@ def execute(self, context):
     bpy.self.I3D_exportUseSoftwareFileName = False
     bpy.self.I3D_exportFileLocation = self.filepath
     if (self.I3D_exportSelected):
-        io_export_i3d.i3d_export.I3DExportSelected()
+        io_export_i3d.export_i3d.I3DExportSelected()
     else:
-        io_export_i3d.i3d_export.I3DExportAll()
+        io_export_i3d.export_i3d.I3DExportAll()
     return {'FINISHED'}
 
 # -----------------------------------------------------------------------------
@@ -781,6 +782,36 @@ def draw(self, context):
     row = layout.row(align=True)
     row.operator("i3d.panel_export_attr", text="Apply Selected").state = 4
     row.operator("i3d.panel_export_attr", text="Remove Selected").state = 5
+    
+    def set_buttonAttrSelect(self, context):
+        selected_objs = context.selected_objects
+    
+    buttonAttrSelect_type = None
+
+    if self.ButtonAttrSelect == 'LC':
+        buttonAttrSelect_type = 'Load Current'
+    elif self.ButtonAttrSelect == 'SC':
+        buttonAttrSelect_type = 'Save Current'
+    elif self.ButtonAttrSelect == 'RC':
+        buttonAttrSelect_type = 'Remove Current' 
+    elif self.ButtonAttrSelect == 'AS':
+        buttonAttrSelect_type = 'Apply Selected'
+    elif self.ButtonAttrSelect == 'RS':
+        buttonAttrSelect_type = 'Remove Selected'
+
+    else:
+        UIShowWarning('Nothing Selected')
+
+    bpy.types,Scene.ButtonAttrSelect = bpy.props.EmumProperty(
+        items=[('LC', 'None', ''),
+        ('SC', 'Save Current', ''),
+        ('RC', 'Remove Current', ''),
+        ('AS', 'Apply Selected', ''),
+        ('RS', 'Remove Selected', '')],
+        name="ButtonAttrSelect",
+        update=set_buttonAttrSelect
+    )    
+
     # -----------------------------------------
     row = layout.row()
     row.operator("i3d.panel_export_close", icon='X')
@@ -792,11 +823,10 @@ def draw(self, context):
 class I3D_PanelExport_ButtonAttr(bpy.types.Operator):
     bl_idname = "i3d.panel_export_attr"
     bl_label = "Attributes"
-    state = bpy.props.IntProperty()
-
+        
     def execute(self, context):
-        if 1 == self.state:
-            I3DLoadObjectAttributes()
+        if self.state == 1:
+            i3d.panel_export_attr == I3DLoadObjectAttributes()
         elif 2 == self.state:
             I3DSaveObjectAttributes()
         elif 3 == self.state:
