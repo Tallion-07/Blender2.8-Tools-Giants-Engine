@@ -27,7 +27,6 @@ import time
 import bpy
 
 from . import i3d_ui, dcc
-
 time_start = time.time()
 
 bl_info = {

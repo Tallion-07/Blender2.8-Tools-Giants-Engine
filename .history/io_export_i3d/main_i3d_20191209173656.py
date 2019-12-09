@@ -23,11 +23,6 @@
 
 # <pep8-120 compliant>
 import time
-
-import bpy
-
-from . import i3d_ui, dcc
-
 time_start = time.time()
 
 bl_info = {
@@ -46,14 +41,13 @@ bl_info = {
 # global DCC_PLATFORM
 # DCC_PLATFORM = "blender"
 
-# if "bpy" in locals():
-#    import importlib
-# if "i3d_ui" in locals():
-#    importlib.reload(i3d_ui)
-# if "export_i3d" in locals():
-#    importlib.reload(dcc)
-# else:
-
+if "bpy" in locals():
+    import importlib
+if "import_i3d" in locals():
+    importlib.reload(import_i3d) 
+if "export_i3d" in locals():
+    importlib.reload(export_i3d)
+    import bpy
 
 # -------------------------------------------------------------------------------
 #   I3D Menu Class
@@ -63,15 +57,15 @@ bl_info = {
 class I3D_Menu(bpy.types.Menu):
     bl_label = "GIANTS I3D"
     bl_idname = "i3d_menu"
-
+    
 
 def draw(self, context):
     layout = self.layout
     layout.label(text="v {0}".format(bl_info["version"]))
     layout.operator("i3d.menu_export")
-
+        
 # -------------------------------------------------------------------------------
-#   I3D Menu Draw
+#   I3D Menu Draw 
 # -------------------------------------------------------------------------------
 
 
@@ -84,16 +78,15 @@ def draw_I3D_Menu(self, context):
 
 
 classes = (
-    I3D_Menu,
+    I3D_menu,
 )
 
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-
-
-bpy.types.INFO_HT_header.append(draw_I3D_Menu)
+    
+        bpy.types.INFO_HT_header.append(draw_I3D_Menu)
 
 
 def unregister():

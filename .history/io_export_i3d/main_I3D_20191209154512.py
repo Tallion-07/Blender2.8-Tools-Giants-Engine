@@ -48,12 +48,15 @@ bl_info = {
 if "bpy" in locals():
     import importlib
 if "import_i3d" in locals():
-    importlib.reload('import_i3d') 
+   importlib.reload(import_i3d) 
 if "export_i3d" in locals():
     importlib.reload('export_i3d')
 
-importlib.import_module('export_i3d', 'io_export_i3d')
+
 import bpy
+
+import io_export_i3d
+
 from bpy.props import (
     BoolProperty,
     EnumProperty,
@@ -68,6 +71,7 @@ from bpy_extras.io_utils import (
     orientation_helper,
     path_reference_mode,
     )
+
 
 # ----------------------------------------------
 # Export section of Menu - Recreated from i3d_ui
@@ -104,7 +108,7 @@ class Import_I3D(bpy.types.Operator, ImportHelper):
 # ----------------------------------------------
 @orientation_helper(axis_forward='-Z', axis_up='Y')  # added
 class Export_I3D(bpy.types.Operator, ExportHelper):  # changed bpy_extras.io_utils.ExportHelper
-    """Write a I3D file."""
+    """Export a I3D file."""
 
     bl_idname = "export_scene.i3d"
     bl_label = "Export I3D"
@@ -800,9 +804,9 @@ def draw(self, context):
         buttonAttrSelect_type = 'Remove Selected'
 
     else:
-        UIShowWarning('Nothing Selected')
+        UserWarning('Nothing Selected')
 
-    bpy.types,Scene.ButtonAttrSelect = bpy.props.EmumProperty(
+    bpy.types.Scene.ButtonAttrSelect = bpy.props.EnumProperty(
         items=[('LC', 'None', ''),
         ('SC', 'Save Current', ''),
         ('RC', 'Remove Current', ''),

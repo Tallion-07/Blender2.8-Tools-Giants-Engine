@@ -23,11 +23,6 @@
 
 # <pep8-120 compliant>
 import time
-
-import bpy
-
-from . import i3d_ui, dcc
-
 time_start = time.time()
 
 bl_info = {
@@ -46,14 +41,13 @@ bl_info = {
 # global DCC_PLATFORM
 # DCC_PLATFORM = "blender"
 
-# if "bpy" in locals():
-#    import importlib
-# if "i3d_ui" in locals():
-#    importlib.reload(i3d_ui)
-# if "export_i3d" in locals():
-#    importlib.reload(dcc)
-# else:
-
+if "bpy" in locals():
+    import importlib
+if "import_i3d" in locals():
+    importlib.reload(import_i3d)
+if "export_i3d" in locals():
+    importlib.reload(export_i3d)
+    import bpy
 
 # -------------------------------------------------------------------------------
 #   I3D Menu Class

@@ -23,11 +23,6 @@
 
 # <pep8-120 compliant>
 import time
-
-import bpy
-
-from . import i3d_ui, dcc
-
 time_start = time.time()
 
 bl_info = {
@@ -53,7 +48,9 @@ bl_info = {
 # if "export_i3d" in locals():
 #    importlib.reload(dcc)
 # else:
+import bpy
 
+from . import i3d_ui, dcc
 
 # -------------------------------------------------------------------------------
 #   I3D Menu Class
