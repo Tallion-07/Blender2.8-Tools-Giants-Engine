@@ -25,8 +25,8 @@
 import time
 
 import bpy
-
-from . import i3d_ui, dcc
+import io_export_i3d.i3d_ui
+from io_export_i3d import dcc
 
 time_start = time.time()
 
