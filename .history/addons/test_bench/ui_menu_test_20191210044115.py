@@ -18,16 +18,16 @@
 
 import bpy
 bl_info = {
-    "name": "I3D Tools",
-    "author": "GIANTS Software, Jason Oppermann",
-    "version": (8, 1, 2),
+    "name": "GIANTS I3D Exporter Tools",
+    "author": "GIANTS Software",
     "blender": (2, 80, 0),
-    "location": "File > Import-Export",
+    "version": (8, 1, 1),
+    "location": "GIANTS I3D",
     "description": "GIANTS Utilities and Exporter",
-    "warning": "TESTING",
-    "wiki_url": "https://github.com/Tallion-07/Blender2.8-Tools-Giants-Engine/wiki",
-    "support": "TESTING",
-    "category": "Import-Export"}
+    "warning": "",
+    "wiki_url": "http://gdn.giants-software.com",
+    "tracker_url": "http://gdn.giants-software.com",
+    "category": "Game Engine"}
 
 # ---------------------------------------------
 # I3D Menu Class
@@ -38,15 +38,16 @@ class I3D_Menu(bpy.types.Menu):
     bl_label = "Giants i3d Menu"
     bl_idname = "i3d_menu"
 
-    def draw(self, context):
+    def draw_I3D_menu(self, context):
         layout = self.layout
 
-        layout.label(text="ver{0}".format(bl_info["version"]), icon='WORLD_DATA')
         layout.operator("wm.open_mainfile")
         layout.operator("wm.save_as_mainfile").copy = True
-        layout.operator("wm.save_as_i3d_mainfile")
+        layout.operator("wm.save_as_i3d_mainfile").copy = True
 
         layout.operator("object.shade_smooth")
+
+        layout.label(text="v{0}".format(bl_info["version"]), icon='WORLD_DATA')
 
         # use an operator enum property to populate a sub-menu
         layout.operator_menu_enum("object.select_by_type",

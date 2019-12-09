@@ -41,12 +41,13 @@ class I3D_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
 
-        layout.label(text="ver{0}".format(bl_info["version"]), icon='WORLD_DATA')
         layout.operator("wm.open_mainfile")
         layout.operator("wm.save_as_mainfile").copy = True
-        layout.operator("wm.save_as_i3d_mainfile")
+        layout.operator("save_as_i3d_mainfile").copy = True
 
         layout.operator("object.shade_smooth")
+
+        layout.label(text="v{0}".format(bl_info["version"]), icon='WORLD_DATA')
 
         # use an operator enum property to populate a sub-menu
         layout.operator_menu_enum("object.select_by_type",

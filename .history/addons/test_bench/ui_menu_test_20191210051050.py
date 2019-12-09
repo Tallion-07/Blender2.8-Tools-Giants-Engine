@@ -44,7 +44,7 @@ class I3D_Menu(bpy.types.Menu):
         layout.label(text="ver{0}".format(bl_info["version"]), icon='WORLD_DATA')
         layout.operator("wm.open_mainfile")
         layout.operator("wm.save_as_mainfile").copy = True
-        layout.operator("wm.save_as_i3d_mainfile")
+        layout.operator("save_as_i3d_mainfile")
 
         layout.operator("object.shade_smooth")
 
