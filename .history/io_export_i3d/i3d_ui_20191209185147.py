@@ -24,134 +24,152 @@
 
 import bpy
 import bpy_extras
-from bpy.props import (BoolProperty, EnumProperty, FloatProperty, IntProperty, StringProperty)
-from bpy_extras.io_utils import (ExportHelper, axis_conversion, orientation_helper, path_reference_mode)
 import io_export_i3d.dcc as dcc
-import io_export_i3d.export_i3d
-from io_export_i3d.i3d_UIexport import I3D_PanelExport
-# ----------------------------------------------------------------------------
+import io_export_i3d.i3d_export
+
+from bpy.props import ( 
+    BoolProperty,
+    EnumProperty,
+    FloatProperty, IntProperty,
+    StringProperty)
+from bpy_extras.io_utils import (ExportHelper,
+    axis_conversion,
+    orientation_helper,
+    path_reference_mode,
+    )
+
+
+
+# -----------------------------------------------------------------------------
 #   File -> Export
 # -----------------------------------------------------------------------------
-
 
 @orientation_helper(axis_forward='-Z', axis_up='Y')  # added
 class I3D_FileExport(bpy.types.Operator, ExportHelper):  # changed bpy_extras.io_utils.ExportHelper
     """Write a I3D file."""
+
     bl_idname = "i3d.file_export"
     bl_label = "Export I3D"
     bl_options = {'UNDO', 'PRESET'}  # preset added
     filename_ext = ".i3d"
-    filter_glob: bpy.props.StringProperty(default="*.i3d", options={'HIDDEN'})
-
-# -------------------------------------------------------------------
-#    List of Operator properties, the attributes are assigned
-#    to the class instance from the operator settings before calling.
-# -------------------------------------------------------------------
+    
+    
+    filter_glob: StringProperty(default="*.i3d", options={'HIDDEN'})
 
 
-I3D_exportSelected: bpy.props.BoolProperty(
+""" List of Operator properties, the attributes are assigned
+    to the class instance from the operator settings before calling."""
+
+I3D_exportSelected: BoolProperty(
     name="Export Selected",
     default=False,
     )
-UI_exportOptions: bpy.props.BoolProperty(
+ui_tab: EnumProperty(
+    items=(('EXPORT', 'Export', 'Export-related settings'),
+           ('ATTRIBUTES', 'Attributes', 'Attribute-related settings'),
+           ),
+    name="ui_tab", 
+    description="Export Settings",
+    )
+UI_exportOptions: BoolProperty(
     name="Export Options",
     description="Available Export Options",
     default=True,
     )
-UI_shapeExportSubparts: bpy.props.BoolProperty(
+UI_shapeExportSubparts: BoolProperty(
     name="Shape Export Subparts",
     default=True,
     )
-UI_miscellaneous: bpy.props.BoolProperty(
+UI_miscellaneous: BoolProperty(
     name="Miscellaneous",
     default=True,
     )
-UI_outputFile: bpy.props.BoolProperty(
+UI_outputFile: BoolProperty(
     name="Output File",
     default=True,
     )
-UI_currentNode: bpy.props.BoolProperty(
+UI_currentNode: BoolProperty(
     name="Current Node",
     default=True,
     )
-UI_rigidBody: bpy.props.BoolProperty(
+UI_rigidBody: BoolProperty(
     name="Rigid Body",
     default=True,
     )
-UI_joint: bpy.props.BoolProperty(
+UI_joint: BoolProperty(
     name="Joint",
     default=False,
     )
-UI_rendering: bpy.props.BoolProperty(
+UI_rendering: BoolProperty(
     name="Rendering",
     default=True,
     )
-I3D_exportIK: bpy.props.BoolProperty(
+I3D_exportIK: BoolProperty(
     name="IK",
     default=dcc.SETTINGS_UI['I3D_exportIK']['defaultValue'],
     )
-I3D_exportAnimation: bpy.props.BoolProperty(
+I3D_exportAnimation: BoolProperty(
     name="Animation",
     default=dcc.SETTINGS_UI['I3D_exportAnimation']['defaultValue'],
     )
-I3D_exportShapes: bpy.props.BoolProperty(
+I3D_exportShapes: BoolProperty(
     name="Shapes",
     default=dcc.SETTINGS_UI['I3D_exportShapes']['defaultValue'],
     )
-I3D_exportNurbsCurves: bpy.props.BoolProperty(
+I3D_exportNurbsCurves: BoolProperty(
     name="Nurbs Curves",
     default=dcc.SETTINGS_UI['I3D_exportNurbsCurves']['defaultValue'],
     )
-I3D_exportLights = bpy.props.bpy.props.BoolProperty(
+I3D_exportLights = bpy.props.BoolProperty(
     name="Lights",
     default=dcc.SETTINGS_UI['I3D_exportLights']['defaultValue'],
     )
-I3D_exportCameras: bpy.props.BoolProperty(
+I3D_exportCameras: BoolProperty(
     name="Cameras",
     default=dcc.SETTINGS_UI['I3D_exportCameras']['defaultValue'],
     )
-I3D_exportParticleSystems: bpy.props.BoolProperty(
+I3D_exportParticleSystems: BoolProperty(
     name="Particle Systems",
     default=dcc.SETTINGS_UI['I3D_exportParticleSystems']['defaultValue'],
     )
-I3D_exportUserAttributes: bpy.props.BoolProperty(
+I3D_exportUserAttributes: BoolProperty(
     name="User Attributes",
     default=dcc.SETTINGS_UI['I3D_exportUserAttributes']['defaultValue'],
     )
-I3D_exportNormals: bpy.props.BoolProperty(
+I3D_exportNormals: BoolProperty(
     name="Normals",
     default=dcc.SETTINGS_UI['I3D_exportNormals']['defaultValue'],
     )
-I3D_exportColors: bpy.props.BoolProperty(
+I3D_exportColors: BoolProperty(
     name="Vertex Colors",
     default=dcc.SETTINGS_UI['I3D_exportColors']['defaultValue'],
     )
-I3D_exportTexCoords: bpy.props.BoolProperty(
+I3D_exportTexCoords: BoolProperty(
     name="UVs",
     default=dcc.SETTINGS_UI['I3D_exportTexCoords']['defaultValue'],
     )
-I3D_exportSkinWeigths: bpy.props.BoolProperty(
+I3D_exportSkinWeigths: BoolProperty(
     name="Skin Weigths",
     default=dcc.SETTINGS_UI['I3D_exportSkinWeigths']['defaultValue'],
     )
-I3D_exportMergeGroups: bpy.props.BoolProperty(
+I3D_exportMergeGroups: BoolProperty(
     name="Merge Groups",
     default=dcc.SETTINGS_UI['I3D_exportMergeGroups']['defaultValue'],
     )
-I3D_exportVerbose: bpy.props.BoolProperty(
+I3D_exportVerbose: BoolProperty(
     name="Verbose",
     description="Print info",
     default=dcc.SETTINGS_UI['I3D_exportVerbose']['defaultValue'],
     )
-I3D_exportRelativePaths: bpy.props.BoolProperty(
+I3D_exportRelativePaths: BoolProperty(
     name="Relative Paths",
     default=dcc.SETTINGS_UI['I3D_exportRelativePaths']['defaultValue'],
     )
-I3D_exportApplyModifiers: bpy.props.BoolProperty(
+I3D_exportApplyModifiers: BoolProperty(
     name="Apply Modifiers",
     default=True,
     )
-I3D_exportAxisOrientations: bpy.props.EnumProperty(
+I3D_exportAxisOrientations: EnumProperty(
     items=(("BAKE_TRANSFORMS", "Bake Transforms", "Change axis Z = Y"),
            ("KEEP_AXIS", "Keep Axis", "Rotate Root objects on 90 degrees by X"),
            ("KEEP_TRANSFORMS", "Keep Transforms", "Export with no changes"),
@@ -159,244 +177,244 @@ I3D_exportAxisOrientations: bpy.props.EnumProperty(
     name="Axis Orientations",
     default="BAKE_TRANSFORMS",
     )
-I3D_exportUseSoftwareFileName: bpy.props.BoolProperty(
+I3D_exportUseSoftwareFileName: BoolProperty(
     name="Use Blender Filename",
     default=dcc.SETTINGS_UI['I3D_exportUseSoftwareFileName']['defaultValue'],
     )
-I3D_exportFileLocation: bpy.props.StringProperty(
+I3D_exportFileLocation: StringProperty(
     name="File Location",
     subtype="FILE_PATH",
     )
-I3D_nodeName: bpy.props.StringProperty(
+I3D_nodeName: StringProperty(
     name="Loaded Node",
     default=dcc.SETTINGS_UI['I3D_nodeName']['defaultValue'],
     )
-I3D_nodeIndex: bpy.props.StringProperty(
+I3D_nodeIndex: StringProperty(
     name="Node Index",
     default=dcc.SETTINGS_UI['I3D_nodeIndex']['defaultValue'],
     )
-I3D_static: bpy.props.BoolProperty(
+I3D_static: BoolProperty(
     name="Static",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_static']['defaultValue'],
     description="passive Rigid Body non movable",
     )
-I3D_dynamic: bpy.props.BoolProperty(
+I3D_dynamic: BoolProperty(
     name="Dynamic",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_dynamic']['defaultValue'],
     description="active Rigid Body simulated",
     )
-I3D_kinematic: bpy.props.BoolProperty(
+I3D_kinematic: BoolProperty(
     name="Kinematic",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_kinematic']['defaultValue'],
     description="passive Rigid Body movable",
     )
-I3D_compound: bpy.props.BoolProperty(
+I3D_compound: BoolProperty(
     name="Compound",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_compound']['defaultValue'],
     description="group of Rigid Bodies",
     )
-I3D_compoundChild: bpy.props.BoolProperty(
+I3D_compoundChild: BoolProperty(
     name="Compound Child",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_compoundChild']['defaultValue'],
     description="part of a group of Rigid Bodies",
     )
-I3D_collision: bpy.props.BoolProperty(
+I3D_collision: BoolProperty(
     name="Collision",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_collision']['defaultValue'],
     )
-I3D_collisionMask: bpy.props.IntProperty(
+I3D_collisionMask: IntProperty(
     name="Collision Mask",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_collisionMask']['defaultValue'],
     )
-I3D_solverIterationCount: bpy.props.IntProperty(
+I3D_solverIterationCount: IntProperty(
     name="Solver Iterations",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_solverIterationCount']['defaultValue'],
     )
-I3D_restitution: bpy.props.FloatProperty(
+I3D_restitution: FloatProperty(
     name="Restitution",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_restitution']['defaultValue'],
     )
-I3D_staticFriction: bpy.props.FloatProperty(
+I3D_staticFriction: FloatProperty(
     name="Static Friction",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_staticFriction']['defaultValue'],
     )
-I3D_dynamicFriction: bpy.props.FloatProperty(
+I3D_dynamicFriction: FloatProperty(
     name="Dynamic Friction",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_dynamicFriction']['defaultValue'],
     )
-I3D_linearDamping: bpy.props.FloatProperty(
+I3D_linearDamping: FloatProperty(
     name="Linear Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_linearDamping']['defaultValue'],
     )
-I3D_angularDamping: bpy.props.FloatProperty(
+I3D_angularDamping: FloatProperty(
     name="Angular Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_angularDamping']['defaultValue'],
     )
-I3D_density: bpy.props.FloatProperty(
+I3D_density: FloatProperty(
     name="Density",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_density']['defaultValue'],
     )
-I3D_ccd: bpy.props.BoolProperty(
+I3D_ccd: BoolProperty(
     name="Continues Collision Detection",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_ccd']['defaultValue'],
     )
-I3D_trigger: bpy.props.BoolProperty(
+I3D_trigger: BoolProperty(
     name="Trigger",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_trigger']['defaultValue'],
     )
-I3D_splitType: bpy.props.IntProperty(
+I3D_splitType: IntProperty(
     name="Split Type",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitType']['defaultValue'],
     )
-I3D_splitMinU: bpy.props.FloatProperty(
+I3D_splitMinU: FloatProperty(
     name="Split Min U",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMinU']['defaultValue'],
     )
-I3D_splitMinV: bpy.props.FloatProperty(
+I3D_splitMinV: FloatProperty(
     name="Split Min V",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMinV']['defaultValue'],
     )
-I3D_splitMaxU: bpy.props.FloatProperty(
+I3D_splitMaxU: FloatProperty(
     name="Split Max U",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMaxU']['defaultValue'],
     )
-I3D_splitMaxV: bpy.props.FloatProperty(
+I3D_splitMaxV: FloatProperty(
     name="Split Max V",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMaxV']['defaultValue'],
     )
-I3D_splitUvWorldScale: bpy.props.FloatProperty(
+I3D_splitUvWorldScale: FloatProperty(
     name="Split UV's worldScale",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitUvWorldScale']['defaultValue'],
     )
-I3D_joint: bpy.props.BoolProperty(
+I3D_joint: BoolProperty(
     name="Joint",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_joint']['defaultValue'],
     )
-I3D_projection: bpy.props.BoolProperty(
+I3D_projection: BoolProperty(
     name="Projection",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projection']['defaultValue'],
     )
-I3D_projDistance: bpy.props.FloatProperty(
+I3D_projDistance: FloatProperty(
     name="Projection Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projDistance']['defaultValue'],
     )
-I3D_projAngle: bpy.props.FloatProperty(
+I3D_projAngle: FloatProperty(
     name="Projection Angle",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projAngle']['defaultValue'],
     )
-I3D_xAxisDrive: bpy.props.BoolProperty(
+I3D_xAxisDrive: BoolProperty(
     name="X-Axis Drive",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_xAxisDrive']['defaultValue'],
     )
-I3D_yAxisDrive: bpy.props.BoolProperty(
+I3D_yAxisDrive: BoolProperty(
     name="Y-Axis Drive",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_yAxisDrive']['defaultValue'],
     )
-I3D_zAxisDrive: bpy.props.BoolProperty(
+I3D_zAxisDrive: BoolProperty(
     name="Z-Axis Drive",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_zAxisDrive']['defaultValue'],
     )
-I3D_drivePos: bpy.props.BoolProperty(
+I3D_drivePos: BoolProperty(
     name="Drive Position",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_drivePos']['defaultValue'],
     )
-I3D_driveForceLimit: bpy.props.FloatProperty(
+I3D_driveForceLimit: FloatProperty(
     name="Drive Force Limit",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveForceLimit']['defaultValue'],
     )
-I3D_driveSpring: bpy.props.FloatProperty(
+I3D_driveSpring: FloatProperty(
     name="Drive Spring",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveSpring']['defaultValue'],
     )
-I3D_driveDamping: bpy.props.FloatProperty(
+I3D_driveDamping: FloatProperty(
     name="Drive Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveDamping']['defaultValue'],
     )
-I3D_breakableJoint: bpy.props.BoolProperty(
+I3D_breakableJoint: BoolProperty(
     name="Breakable",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_breakableJoint']['defaultValue'],
     )
-I3D_jointBreakForce: bpy.props.FloatProperty(
+I3D_jointBreakForce: FloatProperty(
     name="Break Force",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_jointBreakForce']['defaultValue'],
     )
-I3D_jointBreakTorque: bpy.props.FloatProperty(
+I3D_jointBreakTorque: FloatProperty(
     name="Break Torque",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_jointBreakTorque']['defaultValue'],
     )
-I3D_oc: bpy.props.BoolProperty(
+I3D_oc: BoolProperty(
     name="Occlusion Culling",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_oc']['defaultValue'],
     )
-I3D_castsShadows: bpy.props.BoolProperty(
+I3D_castsShadows: BoolProperty(
     name="Casts Shadows",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_castsShadows']['defaultValue'],
     )
-I3D_receiveShadows: bpy.props.BoolProperty(
+I3D_receiveShadows: BoolProperty(
     name="Receive Shadows",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_receiveShadows']['defaultValue'],
     )
-I3D_nonRenderable: bpy.props.BoolProperty(
+I3D_nonRenderable: BoolProperty(
     name="Non Renderable",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_nonRenderable']['defaultValue'],
     )
-I3D_clipDistance: bpy.props.FloatProperty(
+I3D_clipDistance: FloatProperty(
     name="Clip Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_clipDistance']['defaultValue'],
     )
-I3D_objectMask: bpy.props.IntProperty(
+I3D_objectMask: IntProperty(
     name="Object Mask",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_objectMask']['defaultValue'],
     )
-I3D_lightMask: bpy.props.StringProperty(
+I3D_lightMask: StringProperty(
     name="Light Mask (Hex)",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lightMask']['defaultValue'],
     )
-I3D_decalLayer: bpy.props.IntProperty(
+I3D_decalLayer: IntProperty(
     name="Decal Layer",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_decalLayer']['defaultValue'],
     )
-I3D_mergeGroup: bpy.props.IntProperty(
+I3D_mergeGroup: IntProperty(
     name="Merge Group",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_mergeGroup']['defaultValue'],
     )
-I3D_mergeGroupRoot: bpy.props.BoolProperty(
+I3D_mergeGroupRoot: BoolProperty(
     name="Merge Group Root",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_mergeGroupRoot']['defaultValue'],
     )
-I3D_boundingVolume: bpy.props.StringProperty(
+I3D_boundingVolume: StringProperty(
     name="Bounding Volume",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_boundingVolume']['defaultValue'],
     )
-I3D_cpuMesh: bpy.props.BoolProperty(
+I3D_cpuMesh: BoolProperty(
     name="CPU Mesh",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_cpuMesh']['defaultValue'],
     )
-I3D_lod: bpy.props.BoolProperty(
+I3D_lod: BoolProperty(
     name="LOD",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod']['defaultValue'],
     )
-I3D_lod0: bpy.props.FloatProperty(
+I3D_lod0: FloatProperty(
     name="Child 0 Distance",
     default=0,
     )
-I3D_lod1: bpy.props.FloatProperty(
+I3D_lod1: FloatProperty(
     name="Child 1 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod1']['defaultValue'],
     )
-I3D_lod2: bpy.props.FloatProperty(
+I3D_lod2: FloatProperty(
     name="Child 2 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod2']['defaultValue'],
     )
-I3D_lod3: bpy.props.FloatProperty(
+I3D_lod3: FloatProperty(
     name="Child 3 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod3']['defaultValue'],
     )
-path_mode: path_reference_mode
 
 
 def __init__(self):
-    self.filepath = bpy.context.scene.I3D_UIexportSettings.I3D_exportFileLocation
+    self.filepath = \
+        bpy.context.scene.I3D_UIexportSettings.I3D_exportFileLocation
 
 
 def draw(self, context):
@@ -631,31 +649,53 @@ def draw(self, context):
     # expanded view
     if context.scene.I3D_UIexportSettings.UI_rigidBody:
         col = box.column()
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_static", text="Static")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_kinematic", text="Kinematic")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_dynamic", text="Dynamic")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_compound", text="Compound")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_compoundChild", text="Compound Child")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_collision", text="Collision")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_collisionMask", text="Collision Mask")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_restitution", text="Restitution")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_staticFriction", text="Static Friction")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_dynamicFriction", text="Dynamic Friction")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_linearDamping", text="Linear Damping")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_angularDamping", text="Angular Damping")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_density", text="Density")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_solverIterationCount", text="Solve Iterations")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_ccd", text="Continues Collision Detection")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_trigger", text="Trigger")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_splitType", text="Split Type")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_static", text="Static")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_kinematic", text="Kinematic")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_dynamic", text="Dynamic")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_compound", text="Compound")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_compoundChild", text="Compound Child")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_collision", text="Collision")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_collisionMask", text="Collision Mask")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_restitution", text="Restitution")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_staticFriction", text="Static Friction")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_dynamicFriction", text="Dynamic Friction")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_linearDamping", text="Linear Damping")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_angularDamping", text="Angular Damping")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_density", text="Density")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_solverIterationCount", text="Solve Iterations")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_ccd", text="Continues Collision Detection")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_trigger", text="Trigger")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitType", text="Split Type")
         row = col.row()
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_splitMinU", text="Split Min U")
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_splitMaxU", text="Split Max U")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitMinU", text="Split Min U")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitMaxU", text="Split Max U")
         row = box.row()
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_splitMinV", text="Split Min V")
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_splitMaxV", text="Split Max V")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitMinV", text="Split Min V")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitMaxV", text="Split Max V")
         row = box.row()
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_splitUvWorldScale", text="Split UV's worldScale")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_splitUvWorldScale", text="Split UV's worldScale")
     # -----------------------------------------
     # "Joint" box
     box = layout.box()
@@ -668,19 +708,32 @@ def draw(self, context):
     if context.scene.I3D_UIexportSettings.UI_joint:
         col = box.column()
         col.prop(context.scene.I3D_UIexportSettings, "I3D_joint", text="Joint")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_projection", text="Projection")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_projDistance", text="Projection Distance")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_projAngle", text="Projection Angle")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_xAxisDrive", text="X-Axis Drive")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_yAxisDrive", text="Y-Axis Drive")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_zAxisDrive", text="Z-Axis Drive")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_drivePos", text="Drive Position")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_driveForceLimit", text="Drive Force Limit")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_driveSpring", text="Drive Spring")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_driveDamping", text="Drive Damping")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_breakableJoint", text="Breakable")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_jointBreakForce", text="Break Force")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_jointBreakTorque", text="Break Torque")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_projection", text="Projection")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_projDistance", text="Projection Distance")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_projAngle", text="Projection Angle")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_xAxisDrive", text="X-Axis Drive")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_yAxisDrive", text="Y-Axis Drive")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_zAxisDrive", text="Z-Axis Drive")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_drivePos", text="Drive Position")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_driveForceLimit", text="Drive Force Limit")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_driveSpring", text="Drive Spring")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_driveDamping", text="Drive Damping")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_breakableJoint", text="Breakable")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_jointBreakForce", text="Break Force")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_jointBreakTorque", text="Break Torque")
     # -----------------------------------------
     # "Rendering" box
     box = layout.box()
@@ -693,25 +746,42 @@ def draw(self, context):
     # expanded view
     if context.scene.I3D_UIexportSettings.UI_rendering:
         col = box.column()
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_oc", text="Occlusion Culling")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_castsShadows", text="Casts Shadows")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_receiveShadows", text="Receive Shadows")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_nonRenderable", text="Non Renderable")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_clipDistance", text="Clip Distance")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_objectMask", text="Object Mask")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_lightMask", text="Light Mask (Hex)")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_decalLayer", text="Decal Layer")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_mergeGroup", text="Merge Group")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_mergeGroupRoot", text="Merge Group Root")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_boundingVolume", text="Bounding Volume")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_cpuMesh", text="CPU Mesh")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_lod", text="LOD")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_oc", text="Occlusion Culling")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_castsShadows", text="Casts Shadows")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_receiveShadows", text="Receive Shadows")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_nonRenderable", text="Non Renderable")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_clipDistance", text="Clip Distance")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_objectMask", text="Object Mask")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lightMask", text="Light Mask (Hex)")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_decalLayer", text="Decal Layer")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_mergeGroup", text="Merge Group")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_mergeGroupRoot", text="Merge Group Root")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_boundingVolume", text="Bounding Volume")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_cpuMesh", text="CPU Mesh")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lod", text="LOD")
         row = col.row()
         row.enabled = False
-        row.prop(context.scene.I3D_UIexportSettings, "I3D_lod0", text="Child 0 Distance")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_lod1", text="Child 1 Distance")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_lod2", text="Child 2 Distance")
-        col.prop(context.scene.I3D_UIexportSettings, "I3D_lod3", text="Child 3 Distance")
+        row.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lod0", text="Child 0 Distance")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lod1", text="Child 1 Distance")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lod2", text="Child 2 Distance")
+        col.prop(context.scene.I3D_UIexportSettings,
+                 "I3D_lod3", text="Child 3 Distance")
     # -----------------------------------------
     row = layout.row(align=True)
     row.operator("i3d.panel_export_attr", text="Load Current").state = 1
@@ -731,7 +801,7 @@ def draw(self, context):
 class I3D_PanelExport_ButtonAttr(bpy.types.Operator):
     bl_idname = "i3d.panel_export_attr"
     bl_label = "Attributes"
-    state = bpy.props.bpy.props.IntProperty()
+    state = bpy.props.IntProperty()
 
     def execute(self, context):
         if 1 == self.state:
@@ -750,7 +820,7 @@ class I3D_PanelExport_ButtonAttr(bpy.types.Operator):
 class I3D_PanelExport_ButtonExport(bpy.types.Operator):
     bl_idname = "i3d.panel_export_do"
     bl_label = "Export"
-    state = bpy.props.bpy.props.IntProperty()
+    state = bpy.props.IntProperty()
 
     def execute(self, context):
         if 1 == self.state:
@@ -768,12 +838,14 @@ class I3D_MenuExport(bpy.types.Operator):
     bl_idname = "i3d.menu_export"
 
     def execute(self, context):
-        bpy.utils.register_class(I3D_PanelExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonClose)
-        bpy.utils.register_class(I3D_PanelExport_ButtonExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        try:
+            bpy.utils.register_class(I3D_PanelExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonClose)
+            bpy.utils.register_class(I3D_PanelExport_ButtonExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        except:
+            pass
         return {'FINISHED'}
-
 
 class I3D_PanelExport_ButtonClose(bpy.types.Operator):
     bl_idname = "i3d.panel_export_close"

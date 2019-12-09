@@ -28,7 +28,6 @@ from bpy.props import (BoolProperty, EnumProperty, FloatProperty, IntProperty, S
 from bpy_extras.io_utils import (ExportHelper, axis_conversion, orientation_helper, path_reference_mode)
 import io_export_i3d.dcc as dcc
 import io_export_i3d.export_i3d
-from io_export_i3d.i3d_UIexport import I3D_PanelExport
 # ----------------------------------------------------------------------------
 #   File -> Export
 # -----------------------------------------------------------------------------
@@ -768,10 +767,14 @@ class I3D_MenuExport(bpy.types.Operator):
     bl_idname = "i3d.menu_export"
 
     def execute(self, context):
-        bpy.utils.register_class(I3D_PanelExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonClose)
-        bpy.utils.register_class(I3D_PanelExport_ButtonExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        try:
+            bpy.utils.register_class(I3D_PanelExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonClose)
+            bpy.utils.register_class(I3D_PanelExport_ButtonExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        except:
+            ModuleNotFoundError
+            pass
         return {'FINISHED'}
 
 

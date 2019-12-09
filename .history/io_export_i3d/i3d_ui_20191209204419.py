@@ -768,10 +768,13 @@ class I3D_MenuExport(bpy.types.Operator):
     bl_idname = "i3d.menu_export"
 
     def execute(self, context):
-        bpy.utils.register_class(I3D_PanelExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonClose)
-        bpy.utils.register_class(I3D_PanelExport_ButtonExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        try:
+            bpy.utils.register_class(I3D_PanelExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonClose)
+            bpy.utils.register_class(I3D_PanelExport_ButtonExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        except: 
+            pass
         return {'FINISHED'}
 
 

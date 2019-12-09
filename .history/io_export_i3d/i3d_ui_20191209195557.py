@@ -24,11 +24,12 @@
 
 import bpy
 import bpy_extras
-from bpy.props import (BoolProperty, EnumProperty, FloatProperty, IntProperty, StringProperty)
-from bpy_extras.io_utils import (ExportHelper, axis_conversion, orientation_helper, path_reference_mode)
 import io_export_i3d.dcc as dcc
-import io_export_i3d.export_i3d
-from io_export_i3d.i3d_UIexport import I3D_PanelExport
+import io_export_i3d.i3d_export
+
+from bpy.props import (bpy.props.BoolProperty, bpy.props.EnumProperty, FloatProperty, bpy.props.IntProperty, bpy.props.StringProperty)
+from bpy_extras.io_utils import (ExportHelper, axis_conversion, orientation_helper, path_reference_mode)
+
 # ----------------------------------------------------------------------------
 #   File -> Export
 # -----------------------------------------------------------------------------
@@ -40,6 +41,7 @@ class I3D_FileExport(bpy.types.Operator, ExportHelper):  # changed bpy_extras.io
     bl_idname = "i3d.file_export"
     bl_label = "Export I3D"
     bl_options = {'UNDO', 'PRESET'}  # preset added
+    
     filename_ext = ".i3d"
     filter_glob: bpy.props.StringProperty(default="*.i3d", options={'HIDDEN'})
 
@@ -212,27 +214,27 @@ I3D_solverIterationCount: bpy.props.IntProperty(
     name="Solver Iterations",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_solverIterationCount']['defaultValue'],
     )
-I3D_restitution: bpy.props.FloatProperty(
+I3D_restitution: FloatProperty(
     name="Restitution",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_restitution']['defaultValue'],
     )
-I3D_staticFriction: bpy.props.FloatProperty(
+I3D_staticFriction: FloatProperty(
     name="Static Friction",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_staticFriction']['defaultValue'],
     )
-I3D_dynamicFriction: bpy.props.FloatProperty(
+I3D_dynamicFriction: FloatProperty(
     name="Dynamic Friction",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_dynamicFriction']['defaultValue'],
     )
-I3D_linearDamping: bpy.props.FloatProperty(
+I3D_linearDamping: FloatProperty(
     name="Linear Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_linearDamping']['defaultValue'],
     )
-I3D_angularDamping: bpy.props.FloatProperty(
+I3D_angularDamping: FloatProperty(
     name="Angular Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_angularDamping']['defaultValue'],
     )
-I3D_density: bpy.props.FloatProperty(
+I3D_density: FloatProperty(
     name="Density",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_density']['defaultValue'],
     )
@@ -248,23 +250,23 @@ I3D_splitType: bpy.props.IntProperty(
     name="Split Type",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitType']['defaultValue'],
     )
-I3D_splitMinU: bpy.props.FloatProperty(
+I3D_splitMinU: FloatProperty(
     name="Split Min U",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMinU']['defaultValue'],
     )
-I3D_splitMinV: bpy.props.FloatProperty(
+I3D_splitMinV: FloatProperty(
     name="Split Min V",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMinV']['defaultValue'],
     )
-I3D_splitMaxU: bpy.props.FloatProperty(
+I3D_splitMaxU: FloatProperty(
     name="Split Max U",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMaxU']['defaultValue'],
     )
-I3D_splitMaxV: bpy.props.FloatProperty(
+I3D_splitMaxV: FloatProperty(
     name="Split Max V",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitMaxV']['defaultValue'],
     )
-I3D_splitUvWorldScale: bpy.props.FloatProperty(
+I3D_splitUvWorldScale: FloatProperty(
     name="Split UV's worldScale",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_splitUvWorldScale']['defaultValue'],
     )
@@ -276,11 +278,11 @@ I3D_projection: bpy.props.BoolProperty(
     name="Projection",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projection']['defaultValue'],
     )
-I3D_projDistance: bpy.props.FloatProperty(
+I3D_projDistance: FloatProperty(
     name="Projection Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projDistance']['defaultValue'],
     )
-I3D_projAngle: bpy.props.FloatProperty(
+I3D_projAngle: FloatProperty(
     name="Projection Angle",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_projAngle']['defaultValue'],
     )
@@ -300,15 +302,15 @@ I3D_drivePos: bpy.props.BoolProperty(
     name="Drive Position",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_drivePos']['defaultValue'],
     )
-I3D_driveForceLimit: bpy.props.FloatProperty(
+I3D_driveForceLimit: FloatProperty(
     name="Drive Force Limit",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveForceLimit']['defaultValue'],
     )
-I3D_driveSpring: bpy.props.FloatProperty(
+I3D_driveSpring: FloatProperty(
     name="Drive Spring",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveSpring']['defaultValue'],
     )
-I3D_driveDamping: bpy.props.FloatProperty(
+I3D_driveDamping: FloatProperty(
     name="Drive Damping",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_driveDamping']['defaultValue'],
     )
@@ -316,11 +318,11 @@ I3D_breakableJoint: bpy.props.BoolProperty(
     name="Breakable",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_breakableJoint']['defaultValue'],
     )
-I3D_jointBreakForce: bpy.props.FloatProperty(
+I3D_jointBreakForce: FloatProperty(
     name="Break Force",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_jointBreakForce']['defaultValue'],
     )
-I3D_jointBreakTorque: bpy.props.FloatProperty(
+I3D_jointBreakTorque: FloatProperty(
     name="Break Torque",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_jointBreakTorque']['defaultValue'],
     )
@@ -340,7 +342,7 @@ I3D_nonRenderable: bpy.props.BoolProperty(
     name="Non Renderable",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_nonRenderable']['defaultValue'],
     )
-I3D_clipDistance: bpy.props.FloatProperty(
+I3D_clipDistance: FloatProperty(
     name="Clip Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_clipDistance']['defaultValue'],
     )
@@ -376,19 +378,19 @@ I3D_lod: bpy.props.BoolProperty(
     name="LOD",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod']['defaultValue'],
     )
-I3D_lod0: bpy.props.FloatProperty(
+I3D_lod0: FloatProperty(
     name="Child 0 Distance",
     default=0,
     )
-I3D_lod1: bpy.props.FloatProperty(
+I3D_lod1: FloatProperty(
     name="Child 1 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod1']['defaultValue'],
     )
-I3D_lod2: bpy.props.FloatProperty(
+I3D_lod2: FloatProperty(
     name="Child 2 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod2']['defaultValue'],
     )
-I3D_lod3: bpy.props.FloatProperty(
+I3D_lod3: FloatProperty(
     name="Child 3 Distance",
     default=dcc.SETTINGS_ATTRIBUTES['I3D_lod3']['defaultValue'],
     )
@@ -768,12 +770,14 @@ class I3D_MenuExport(bpy.types.Operator):
     bl_idname = "i3d.menu_export"
 
     def execute(self, context):
-        bpy.utils.register_class(I3D_PanelExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonClose)
-        bpy.utils.register_class(I3D_PanelExport_ButtonExport)
-        bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        try:
+            bpy.utils.register_class(I3D_PanelExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonClose)
+            bpy.utils.register_class(I3D_PanelExport_ButtonExport)
+            bpy.utils.register_class(I3D_PanelExport_ButtonAttr)
+        except:
+            pass
         return {'FINISHED'}
-
 
 class I3D_PanelExport_ButtonClose(bpy.types.Operator):
     bl_idname = "i3d.panel_export_close"
